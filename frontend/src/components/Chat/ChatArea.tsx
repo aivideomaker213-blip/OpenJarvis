@@ -1,4 +1,3 @@
-
 import { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { MessageBubble } from './MessageBubble';
@@ -15,6 +14,8 @@ import {
   X,
 } from 'lucide-react';
 import { listConnectors } from '../../lib/connectors-api';
+
+const SATHI_LOGO_PATH = '/sathi-ai-logo.png';
 
 export function ChatArea() {
   const activeId = useAppStore((s) => s.activeId);
@@ -102,6 +103,7 @@ export function ChatArea() {
     useState<boolean | null>(null);
 
   const [bannerDismissed, setBannerDismissed] = useState(false);
+  const [logoLoadFailed, setLogoLoadFailed] = useState(false);
 
   useEffect(() => {
     listConnectors()
@@ -253,7 +255,7 @@ export function ChatArea() {
               />
 
               <div
-                className="relative flex items-center justify-center rounded-full"
+                className="relative flex items-center justify-center rounded-full overflow-hidden"
                 style={{
                   width: 90,
                   height: 90,
@@ -262,18 +264,27 @@ export function ChatArea() {
                   boxShadow: '0 0 25px rgba(255,45,25,0.65)',
                 }}
               >
-                <span
-                  style={{
-                    fontSize: 65,
-                    fontWeight: 900,
-                    fontStyle: 'italic',
-                    color: '#ffffff',
-                    textShadow: '0 0 15px #ff493b',
-                    lineHeight: 1,
-                  }}
-                >
-                  S
-                </span>
+                {!logoLoadFailed ? (
+                  <img
+                    src={SATHI_LOGO_PATH}
+                    alt="SATHI AI Logo"
+                    onError={() => setLogoLoadFailed(true)}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span
+                    style={{
+                      fontSize: 65,
+                      fontWeight: 900,
+                      fontStyle: 'italic',
+                      color: '#ffffff',
+                      textShadow: '0 0 15px #ff493b',
+                      lineHeight: 1,
+                    }}
+                  >
+                    S
+                  </span>
+                )}
               </div>
 
               <div
